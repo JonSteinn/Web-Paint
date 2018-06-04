@@ -1,6 +1,5 @@
 #canvas {
     background-color: rgba(200, 200, 200, 0.2);
-    /*
     padding: 0;
     margin: auto;
     display: block;
@@ -8,5 +7,14 @@
     top: 0;
     bottom: 0;
     left: 0;
-    right: 0;*/
+    right: 0;
+}
+
+#main-nav {
+    position: absolute;
+    left: 0;
+    height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }

@@ -3,15 +3,18 @@
     // The object holding what to draw
     let drawer = {
         shapes: [],
-        selectedShape: 'circle',
+        selectedShape: 'lineList',
         canvas: document.getElementById('canvas'),
         ctx: document.getElementById('canvas').getContext('2d'),
         selectedElement: null,
         availableShapes: {
             RECTANGLE: 'rectangle',
             OVAL: 'oval',
-            CIRCLE: 'circle'
-        }
+            CIRCLE: 'circle',
+            LINE: 'line',
+            LINE_LIST: 'lineList',
+            TEXT: 'text',
+        },
     };
 
     // Object to simulate unbuffered keyboard io for the keys we need
@@ -19,6 +22,19 @@
         ctrl: false,
         shift: false
     };
+
+    document.querySelectorAll('#shape-list li').forEach(function (elem) {
+        elem.addEventListener('click', function (evt) {
+            var clickedShape = elem.dataset.shape;
+            if (clickedShape !== drawer.selectedShape) {
+                drawer.selectedElement = null;
+                drawer.selectedShape = clickedShape;
+
+                document.querySelectorAll('#shape-list li.active')[0].classList.toggle('active');
+                elem.classList.toggle('active');
+            }
+        });
+    });
 
     /**
      * Wipes the canvas and redraws everything
@@ -30,6 +46,7 @@
             drawer.selectedElement.render(drawer.ctx);
         }
 
+
         for (let i = 0; i < drawer.shapes.length; i++) {
             if (drawer.shapes[i]) {
                 drawer.shapes[i].render(drawer.ctx);
@@ -38,17 +55,25 @@
     }
 
     drawer.canvas.addEventListener('mousedown', function (mouseEvent) {
+        var pos = {x: mouseEvent.offsetX, y: mouseEvent.offsetY};
         switch (drawer.selectedShape) {
             case drawer.availableShapes.RECTANGLE:
-                drawer.selectedElement = new Rectangle({x: mouseEvent.offsetX, y: mouseEvent.offsetY}, 0, 0);
+                drawer.selectedElement = new Rectangle(pos, 0, 0);
                 break;
             case drawer.availableShapes.OVAL:
-                drawer.selectedElement = new Oval({x: mouseEvent.offsetX, y: mouseEvent.offsetY}, 0, 0);
+                drawer.selectedElement = new Oval(pos, 0, 0);
                 break;
             case drawer.availableShapes.CIRCLE:
-                drawer.selectedElement = new Circle({x: mouseEvent.offsetX, y: mouseEvent.offsetY}, 0);
+                drawer.selectedElement = new Circle(pos, 0);
                 break;
-
+            case drawer.availableShapes.LINE:
+                drawer.selectedElement = new Line(pos, pos);
+                break;
+            case drawer.availableShapes.LINE_LIST:
+                drawer.selectedElement = new LineList(pos);
+                break;
+            case drawer.availableShapes.TEXT:
+                break;
         }
     });
 

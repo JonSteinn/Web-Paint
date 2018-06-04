@@ -3,13 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Web-Paint</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="assets/css/paint_styles.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://rawgit.com/goldfire/CanvasInput/master/CanvasInput.min.js"></script>
 </head>
 <body>
-    <canvas id="canvas" width="1000" height="600">
-        Your browser does not support canvas :(
-    </canvas>
-
+    <nav id="main-nav" class="navbar navbar-default">
+        <div class="container-fluid">
+            <ul id="shape-list" class="nav navbar-nav">
+                <li class="active" data-shape="rectangle"><a>RECTANGLE</a></li>
+                <li data-shape="oval"><a>OVAL</a></li>
+                <li data-shape="circle"><a>CIRCLE</a></li>
+                <li data-shape="line"><a>LINE</a></li>
+                <li data-shape="lineList"><a>LINE_LIST</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <canvas id="canvas" width="1000" height="600">
+            Your browser does not support canvas :(
+        </canvas>
+    </div>
     <script src="assets/js/shapes.js"></script>
     <script src="assets/js/draw.js"></script>
 </body>

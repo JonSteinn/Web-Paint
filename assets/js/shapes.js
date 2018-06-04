@@ -102,6 +102,8 @@ class Circle extends Oval {
      *
      * @param position
      * @param radius
+     *
+     *
      */
     constructor(position, radius) {
         super(position, radius, radius);
@@ -114,3 +116,50 @@ class Circle extends Oval {
     }
 }
 
+class Line extends Shape {
+    constructor(startPosition, endPosition) {
+        super(startPosition);
+        this.endPosition = {x: endPosition.x, y: endPosition.y};
+    }
+
+    render(ctx) {
+        ctx.beginPath();
+        ctx.moveTo(this.position.x, this.position.y);
+        ctx.lineTo(this.endPosition.x, this.endPosition.y);
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    resize(x, y) {
+        this.endPosition.x = x;
+        this.endPosition.y = y;
+    }
+}
+
+class LineList extends Shape {
+    constructor(position) {
+        super(position);
+        this.xList = [];
+        this.yList = [];
+    }
+
+    render(ctx) {
+        ctx.beginPath();
+        ctx.moveTo(this.position.x, this.position.y);
+        for (let i = 0; ; i++) {
+            if (i > this.xList.length - 1) {
+                ctx.quadraticCurveTo(this.xList[i], this.yList[i], this.xList[i+1], this.yList[i+1]);
+                break;
+            }
+            let center = {x: (this.xList[i] + this.xList[i + 1]) / 2, y: (this.yList[i] + this.yList[i + 1]) / 2};
+            ctx.quadraticCurveTo(this.xList[i], this.yList[i], center.x, center.y);
+        }
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    resize(x, y) {
+        this.xList.push(x);
+        this.yList.push(y);
+    }
+}
