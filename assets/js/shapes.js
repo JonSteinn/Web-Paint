@@ -1,128 +1,84 @@
-/**
- *
- */
 class Shape {
-    /**
-     *
-     * @param position
-     */
-    constructor(position) {
+    constructor(position, settings) {
         this.position = position;
+        this.settings = settings;
     }
 
-    /**
-     *
-     * @param ctx
-     */
     render(ctx) {
-
+        // TODO: apply settings to ctx
+        ctx.fillStyle = this.settings.color;
+        ctx.strokeStyle = this.settings.color;
     }
 
-    /**
-     *
-     * @param position
-     */
     move(position) {
         this.position = position;
     }
 
-    /**
-     *
-     * @param x
-     * @param y
-     */
     resize(x, y) {
 
     }
 }
 
-/**
- *
- */
 class Rectangle extends Shape {
-    /**
-     *
-     * @param position
-     * @param width
-     * @param height
-     */
-    constructor(position, width, height) {
-        super(position);
+    constructor(position, settings, width, height) {
+        super(position, settings);
         this.width = width;
         this.height = height;
     }
 
-    /** @inheritdoc */
     render(ctx) {
+        super.render(ctx);
         ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
 
-    /** @inheritdoc */
     resize(x, y) {
         this.width = x - this.position.x;
         this.height = y - this.position.y;
     }
 }
 
-/**
- *
- */
 class Oval extends Shape {
-    /**
-     *
-     * @param position
-     * @param xRadius
-     * @param yRadius
-     */
-    constructor(position, xRadius, yRadius) {
-        super(position);
+    constructor(position, settings, xRadius, yRadius) {
+        super(position, settings);
         this.xRadius = xRadius;
         this.yRadius = yRadius;
     }
 
-    /** @inheritdoc */
     render(ctx) {
+        super.render(ctx);
         ctx.beginPath();
         ctx.ellipse(this.position.x, this.position.y, this.xRadius, this.yRadius, 0, 0, 2*Math.PI);
         ctx.fill();
     }
 
-    /** @inheritdoc */
     resize(x, y) {
         this.xRadius = Math.abs(x - this.position.x);
         this.yRadius = Math.abs(y - this.position.y);
     }
 }
 
-/**
- *
- */
 class Circle extends Oval {
-    /**
-     *
-     * @param position
-     * @param radius
-     *
-     *
-     */
-    constructor(position, radius) {
-        super(position, radius, radius);
+
+    constructor(position, settings, radius) {
+        super(position, settings, radius, radius);
     }
 
     /** @inheritdoc */
     resize(x, y) {
-        this.xRadius = Math.max(Math.abs(x - this.position.x), Math.abs(y - this.position.y));
-        this.yRadius = this.xRadius;
+        let radius = Math.max(Math.abs(x - this.position.x), Math.abs(y - this.position.y));
+        this.xRadius = radius;
+        this.yRadius = radius;
     }
 }
 
 class Line extends Shape {
-    constructor(startPosition, endPosition) {
-        super(startPosition);
+    constructor(startPosition, settings, endPosition) {
+        super(startPosition, settings);
         this.endPosition = {x: endPosition.x, y: endPosition.y};
     }
 
     render(ctx) {
+        super.render(ctx);
         ctx.beginPath();
         ctx.moveTo(this.position.x, this.position.y);
         ctx.lineTo(this.endPosition.x, this.endPosition.y);
@@ -137,13 +93,14 @@ class Line extends Shape {
 }
 
 class LineList extends Shape {
-    constructor(position) {
-        super(position);
+    constructor(position, settings) {
+        super(position, settings);
         this.xList = [];
         this.yList = [];
     }
 
     render(ctx) {
+        super.render(ctx);
         ctx.beginPath();
         ctx.moveTo(this.position.x, this.position.y);
         for (let i = 0; ; i++) {
