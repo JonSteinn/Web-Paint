@@ -14,7 +14,8 @@
             CIRCLE: 'circle',
             LINE: 'line',
             LINE_LIST: 'lineList',
-            TEXT: 'text',
+            DrawnText: 'text',
+            MOVE: 'move'
         },
         settings: {
             color: '#000000',
@@ -68,20 +69,29 @@
             case drawer.availableShapes.LINE_LIST:
                 drawer.selectedElement = new LineList(pos, drawer.currentSettings());
                 break;
-            case drawer.availableShapes.TEXT:
+            case drawer.availableShapes.DrawnText:
+                if (drawer.selectedElement) {
+                    drawer.shapes.push(drawer.selectedElement);
+                    drawer.undoneShapes.splice(0, drawer.undoneShapes.length);
+                }
+                drawer.selectedElement = new DrawnText(pos, drawer.currentSettings());
+                break;
+            case drawer.availableShapes.MOVE:
                 break;
         }
+
+        console.log(drawer.selectedElement);
     });
 
     drawer.canvas.addEventListener('mousemove', function (mouseEvent) {
-        if (drawer.selectedElement) {
+        if (drawer.selectedElement && drawer.selectedShape !== drawer.availableShapes.DrawnText) {
             drawer.selectedElement.resize(mouseEvent.offsetX, mouseEvent.offsetY);
             redraw();
         }
     });
 
     document.addEventListener('mouseup', function (mouseEvent) {
-        if (drawer.selectedElement) {
+        if (drawer.selectedElement && drawer.selectedShape !== drawer.availableShapes.DrawnText) {
             drawer.shapes.push(drawer.selectedElement);
             drawer.selectedElement = null;
             drawer.undoneShapes.splice(0, drawer.undoneShapes.length);
@@ -103,6 +113,16 @@
         }
     }
     document.addEventListener('keypress', function (evt) {
+        if (drawer.selectedShape === drawer.availableShapes.DrawnText) {
+            if (evt.key === 'Enter') {
+                drawer.shapes.push(drawer.selectedElement);
+                drawer.selectedElement = null;
+                drawer.undoneShapes.splice(0, drawer.undoneShapes.length);
+            } else {
+                drawer.selectedElement.resize(evt.key);
+                redraw();
+            }
+        }
         if (evt.key.toUpperCase() === 'Z' && evt.ctrlKey) {
             if (evt.shiftKey) {
                 redo();

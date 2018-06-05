@@ -5,7 +5,6 @@ class Shape {
     }
 
     render(ctx) {
-        // TODO: apply settings to ctx
         ctx.fillStyle = this.settings.color;
         ctx.strokeStyle = this.settings.color;
         ctx.lineWidth = this.settings.width;
@@ -48,12 +47,16 @@ class Oval extends Shape {
         super(position, settings);
         this.xRadius = xRadius;
         this.yRadius = yRadius;
+        this.x = position.x;
+        this.y = position.y;
     }
 
     render(ctx) {
         super.render(ctx);
         ctx.beginPath();
-        ctx.ellipse(this.position.x, this.position.y, this.xRadius, this.yRadius, 0, 0, 2*Math.PI);
+        let c_x = (this.position.x + this.x) / 2;
+        let c_y = (this.position.y + this.y) / 2;
+        ctx.ellipse(c_x, c_y, this.xRadius, this.yRadius, 0, 0, 2 * Math.PI);
         if (this.settings.filled) {
             ctx.fill();
         } else {
@@ -63,8 +66,10 @@ class Oval extends Shape {
     }
 
     resize(x, y) {
-        this.xRadius = Math.abs(x - this.position.x);
-        this.yRadius = Math.abs(y - this.position.y);
+        this.x = x;
+        this.y = y;
+        this.xRadius = Math.abs(x - this.position.x) / 2;
+        this.yRadius = Math.abs(y - this.position.y) / 2;
     }
 }
 
@@ -75,7 +80,9 @@ class Circle extends Oval {
     }
 
     resize(x, y) {
-        let radius = Math.max(Math.abs(x - this.position.x), Math.abs(y - this.position.y));
+        this.x = x;
+        this.y = y;
+        let radius = Math.max(Math.abs(x - this.position.x), Math.abs(y - this.position.y)) / 2;
         this.xRadius = radius;
         this.yRadius = radius;
     }
@@ -128,5 +135,34 @@ class LineList extends Shape {
     resize(x, y) {
         this.xList.push(x);
         this.yList.push(y);
+    }
+}
+
+class DrawnText extends Shape {
+    constructor(position, settings) {
+        super(position, settings);
+        this.chars = [];
+    }
+
+    render(ctx) {
+        super.render(ctx);
+        if (this.settings.filled) {
+            ctx.fillText(this.chars.join(''), this.position.x, this.position.y);
+        } else {
+            ctx.strokeText(this.chars.join(''), this.position.x, this.position.y);
+        }
+    }
+
+    resize(key) {
+        if (key === 'Backspace') {
+            if (this.chars.length > 0) {
+                this.chars.pop();
+            }
+            return;
+        }
+
+        if (key.length === 1) {
+            this.chars.push(key);
+        }
     }
 }
