@@ -124,4 +124,98 @@
         drawer.settings.color = colorPicker.value;
     });
 
+    document.getElementById('img-save').addEventListener('click', function (evt) {
+        let lst = [];
+        for (let i = 0; i < drawer.shapes.length; i++) {
+            let tmp = JSON.parse(JSON.stringify(drawer.shapes[i]));
+            tmp['type'] = drawer.shapes[i].__proto__.constructor.name;
+            lst.push(tmp);
+        }
+
+        let tmp = window.document.createElement('a');
+        tmp.href = window.URL.createObjectURL(new Blob([JSON.stringify(lst)], {type: 'application/json'}));
+        tmp.download = 'image.json';
+        document.body.appendChild(tmp);
+        tmp.click();
+        document.body.removeChild(tmp);
+
+    });
+
+
+    function constructShapesFromFile(e) {
+        let contents = e.target.result;
+        let tmpList = JSON.parse(contents);
+        drawer.selectedElement = null;
+        drawer.shapes.splice(0, drawer.shapes.length);
+        drawer.undoneShapes.splice(0, drawer.undoneShapes.length);
+        for (let i = 0; i < tmpList.length; i++) {
+            let curr = tmpList[i];
+            switch (curr.type) {
+                case 'Rectangle':
+                    drawer.shapes.push(new Rectangle(
+                        curr.position,
+                        curr.settings,
+                        curr.width,
+                        curr.height
+                    ));
+                    break;
+                case 'Oval':
+                    drawer.shapes.push(new Oval(
+                        curr.position,
+                        curr.settings,
+                        curr.xRadius,
+                        curr.yRadius
+                    ));
+                    break;
+                case 'Circle':
+                    drawer.shapes.push(new Circle(
+                        curr.position,
+                        curr.settings,
+                        curr.xRadius
+                    ));
+                    break;
+                case 'Line':
+                    drawer.shapes.push(new Line(
+                        curr.position,
+                        curr.settings,
+                        curr.endPosition
+                    ));
+                    break;
+                case 'LineList':
+                    let ll = new LineList(curr.position, curr.settings);
+                    for (let j = 0; j < curr.xList.length; j++) {
+                        ll.resize(curr.xList[j], curr.yList[j]);
+                    }
+                    drawer.shapes.push(ll);
+                    break;
+            }
+        }
+        redraw();
+    }
+
+    document.getElementById('img-load').addEventListener('click', function (evt) {
+        let inp = window.document.createElement('input');//<input type="file">
+        inp.type = 'file';
+        document.body.appendChild(inp);
+        inp.style.visibility = "hidden";
+        inp.addEventListener('change', function (evt) {
+            let file = evt.target.files[0];
+            if (!file) {
+                return;
+            }
+            let reader = new FileReader();
+            reader.addEventListener('load', constructShapesFromFile);
+            reader.readAsText(file);
+        }, false);
+        inp.click();
+        document.body.removeChild(inp);
+    });
+
+    document.getElementById('img-clear').addEventListener('click', function (evt) {
+        drawer.selectedElement = null;
+        drawer.shapes.splice(0, drawer.shapes.length);
+        drawer.undoneShapes.splice(0, drawer.undoneShapes.length);
+        redraw();
+    });
+
 })();

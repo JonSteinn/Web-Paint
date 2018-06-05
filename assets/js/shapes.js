@@ -8,6 +8,7 @@ class Shape {
         // TODO: apply settings to ctx
         ctx.fillStyle = this.settings.color;
         ctx.strokeStyle = this.settings.color;
+        ctx.lineWidth = this.settings.width;
     }
 
     move(position) {
@@ -63,7 +64,6 @@ class Circle extends Oval {
         super(position, settings, radius, radius);
     }
 
-    /** @inheritdoc */
     resize(x, y) {
         let radius = Math.max(Math.abs(x - this.position.x), Math.abs(y - this.position.y));
         this.xRadius = radius;
