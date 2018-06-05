@@ -9,6 +9,7 @@ class Shape {
         ctx.fillStyle = this.settings.color;
         ctx.strokeStyle = this.settings.color;
         ctx.lineWidth = this.settings.width;
+        ctx.font = this.settings.font;
     }
 
     move(position) {

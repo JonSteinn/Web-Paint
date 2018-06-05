@@ -1,6 +1,6 @@
 (function () {
 
-    // The object holding what to draw
+    //region draw-object
     let drawer = {
         shapes: [],
         undoneShapes: [],
@@ -20,21 +20,20 @@
             color: '#000000',
             filled: false,
             width: 1,
-            font: '12px sans-serif'
+            font: '12pt sans-serif'
         },
+        currentSettings: function () {
+            return {
+                color: drawer.settings.color.slice(0, drawer.settings.color.length),
+                filled: drawer.settings.filled,
+                width: drawer.settings.width,
+                font: drawer.settings.font.slice(0, drawer.settings.font.length)
+            };
+        }
     };
+    //endregion
 
-    // TODO: add to drawer
-    function currentSettings() {
-        return {
-            color: drawer.settings.color.slice(0, drawer.settings.color.length),
-            filled: drawer.settings.filled,
-            width: drawer.settings.width,
-            font: drawer.settings.font.slice(0, drawer.settings.font.length)
-        };
-    }
-
-
+    //region refresh canvas
     function redraw() {
         drawer.ctx.clearRect(0, 0, drawer.ctx.canvas.width, drawer.ctx.canvas.height);
 
@@ -48,25 +47,26 @@
             drawer.selectedElement.render(drawer.ctx);
         }
     }
+    //endregion
 
     //region Mouse Events
     drawer.canvas.addEventListener('mousedown', function (mouseEvent) {
         let pos = {x: mouseEvent.offsetX, y: mouseEvent.offsetY};
         switch (drawer.selectedShape) {
             case drawer.availableShapes.RECTANGLE:
-                drawer.selectedElement = new Rectangle(pos, currentSettings(), 0, 0);
+                drawer.selectedElement = new Rectangle(pos, drawer.currentSettings(), 0, 0);
                 break;
             case drawer.availableShapes.OVAL:
-                drawer.selectedElement = new Oval(pos, currentSettings(), 0, 0);
+                drawer.selectedElement = new Oval(pos, drawer.currentSettings(), 0, 0);
                 break;
             case drawer.availableShapes.CIRCLE:
-                drawer.selectedElement = new Circle(pos, currentSettings(), 0);
+                drawer.selectedElement = new Circle(pos, drawer.currentSettings(), 0);
                 break;
             case drawer.availableShapes.LINE:
-                drawer.selectedElement = new Line(pos, currentSettings(), pos);
+                drawer.selectedElement = new Line(pos, drawer.currentSettings(), pos);
                 break;
             case drawer.availableShapes.LINE_LIST:
-                drawer.selectedElement = new LineList(pos, currentSettings());
+                drawer.selectedElement = new LineList(pos, drawer.currentSettings());
                 break;
             case drawer.availableShapes.TEXT:
                 break;
@@ -150,6 +150,45 @@
     colorPicker.value = '#000000';
     colorPicker.addEventListener('change', function (evt) {
         drawer.settings.color = colorPicker.value;
+    });
+    //endregion
+
+    //region Size-settings
+    let widthSetting = document.getElementById('width-row');
+    let widthDecrease = widthSetting.querySelectorAll('td > a.decrease')[0];
+    let widthIncrease = widthSetting.querySelectorAll('td > a.increase')[0];
+    let widthValue = widthSetting.querySelectorAll('td.value-data')[0];
+    widthDecrease.addEventListener('click', function (evt) {
+        widthValue.innerHTML = Math.max(1, parseInt(widthValue.innerHTML) - 1);
+    });
+    widthIncrease.addEventListener('click', function (evt) {
+        widthValue.innerHTML = Math.min(50, parseInt(widthValue.innerHTML) + 1);
+    });
+
+    let fontSetting = document.getElementById('font-row');
+    let fontDecrease = fontSetting.querySelectorAll('td > a.decrease')[0];
+    let fontIncrease = fontSetting.querySelectorAll('td > a.increase')[0];
+    let fontValue = fontSetting.querySelectorAll('td.value-data')[0];
+    fontDecrease.addEventListener('click', function (evt) {
+        fontValue.innerHTML = ((s) => Math.max(6, parseInt(s.slice(0, s.length - 2)) - 1) + 'pt')(fontValue.innerHTML);
+    });
+    fontIncrease.addEventListener('click', function (evt) {
+        fontValue.innerHTML = ((s) => Math.min(42, parseInt(s.slice(0, s.length - 2)) + 1) + 'pt')(fontValue.innerHTML);
+    });
+
+    let sizeModal = document.getElementById('size-modal');
+    let sizeAbort = sizeModal.querySelectorAll('button.abort');
+    for (let i = 0; i < sizeAbort.length; i++) {
+        sizeAbort[i].addEventListener('click', function (evt) {
+            widthValue.innerHTML = widthSetting.dataset['value'];
+            fontValue.innerHTML = fontSetting.dataset['value'];
+        });
+    }
+    sizeModal.querySelectorAll('button.confirm')[0].addEventListener('click', function (evt) {
+        widthSetting.dataset['value'] = widthValue.innerHTML;
+        drawer.settings.width = parseInt(widthValue.innerHTML);
+        fontSetting.dataset['value'] = fontValue.innerHTML;
+        drawer.settings.font =  fontValue.innerHTML + ' ' + drawer.settings.font.split(' ')[1];
     });
     //endregion
 
