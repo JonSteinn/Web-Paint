@@ -29,7 +29,11 @@ class Rectangle extends Shape {
 
     render(ctx) {
         super.render(ctx);
-        ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+        if (this.settings.filled) {
+            ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+        } else {
+            ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
+        }
     }
 
     resize(x, y) {
@@ -49,7 +53,12 @@ class Oval extends Shape {
         super.render(ctx);
         ctx.beginPath();
         ctx.ellipse(this.position.x, this.position.y, this.xRadius, this.yRadius, 0, 0, 2*Math.PI);
-        ctx.fill();
+        if (this.settings.filled) {
+            ctx.fill();
+        } else {
+            ctx.stroke();
+            ctx.closePath();
+        }
     }
 
     resize(x, y) {

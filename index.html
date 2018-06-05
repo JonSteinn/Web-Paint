@@ -11,35 +11,40 @@
     <script src="https://rawgit.com/goldfire/CanvasInput/master/CanvasInput.min.js"></script>
 </head>
 <body>
-    <nav id="main-nav" class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
-            <ul id="shape-list" class="nav navbar-nav">
-                <li data-shape="rectangle"><a><i class="far fa-square"></i></a></li>
-                <li data-shape="oval"><a>OVAL</a></li>
-                <li data-shape="circle"><a><i class="far fa-circle"></i></a></li>
-                <li data-shape="line"><a><span class="glyphicon glyphicon-minus"></span></a></li>
-                <li class="active" data-shape="lineList"><a><span class="glyphicon glyphicon-pencil"></span></a></li>
-                <li data-shape="text"><a><span class="glyphicon glyphicon-text-width"></span></a></li>
-            </ul>
-            <ul id="settings-list" class="nav navbar-nav">
-                <li><a><input id="color-selector" type="color"></a></li>
-                <li><a>Font</a></li>
-                <li><a>Width</a></li>
-            </ul>
-            <ul id="io-list" class="nav navbar-nav">
-                <li><a id="img-save">Save</a></li>
-                <li><a id="img-load">Load</a></li>
-                <li><a id="img-clear">Clear</a></li>
-            </ul>
-        </div>
-    </nav>
+<nav id="main-nav" class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
-        <canvas id="canvas" width="1000" height="600">
-            Your browser does not support canvas :(
-        </canvas>
+        <ul id="shape-list" class="nav navbar-nav">
+            <li data-shape="rectangle"><a><i class="far fa-square"></i></a></li>
+            <li data-shape="oval"><a><i class="far fa-compass"></i></a></li>
+            <li data-shape="circle"><a><i class="far fa-circle"></i></a></li>
+            <li data-shape="line"><a><span class="glyphicon glyphicon-minus"></span></a></li>
+            <li class="active" data-shape="lineList"><a><span class="glyphicon glyphicon-pencil"></span></a></li>
+            <li data-shape="text"><a><span class="glyphicon glyphicon-text-width"></span></a></li>
+            <li data-shape="move"><a><span class="glyphicon glyphicon-move"></span></a></li>
+        </ul>
+        <ul id="settings-list" class="nav navbar-nav">
+            <li><a><input id="color-selector" type="color"></a></li>
+            <li><a><i class="fas fa-ruler-combined"></i></a></li>
+            <li><a id="fill-toggle" data-filled="no"><i class="far fa-star"></i></a></li>
+        </ul>
+        <ul id="io-list" class="nav navbar-nav">
+            <li><a id="img-save"><span class="glyphicon glyphicon-download"></span></a></li>
+            <li><a id="img-load"><span class="glyphicon glyphicon-upload"></span></a></li>
+            <li><a id="img-clear"><i class="fas fa-file"></i></a></li>
+        </ul>
+        <ul id="time-travel" class="nav navbar-nav">
+            <li><a id="btn-undo"><i class="fas fa-undo"></i></a></li>
+            <li><a id="btn-redo"><i class="fas fa-redo"></i></a></li>
+        </ul>
     </div>
-    <script src="assets/js/shapes.js"></script>
-    <script src="assets/js/draw.js"></script>
+</nav>
+<div class="container-fluid">
+    <canvas id="canvas" width="1000" height="600">
+        Your browser does not support canvas :(
+    </canvas>
+</div>
+<script src="assets/js/shapes.js"></script>
+<script src="assets/js/draw.js"></script>
 </body>
 
 

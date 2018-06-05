@@ -20,10 +20,11 @@
             color: '#000000',
             filled: false,
             width: 1,
-            font: 'sans-serif'
+            font: '12px sans-serif'
         },
     };
 
+    // TODO: add to drawer
     function currentSettings() {
         return {
             color: drawer.settings.color.slice(0, drawer.settings.color.length),
@@ -33,9 +34,7 @@
         };
     }
 
-    /**
-     * Wipes the canvas and redraws everything
-     */
+
     function redraw() {
         drawer.ctx.clearRect(0, 0, drawer.ctx.canvas.width, drawer.ctx.canvas.height);
 
@@ -45,12 +44,12 @@
             }
         }
 
-
         if (drawer.selectedElement) {
             drawer.selectedElement.render(drawer.ctx);
         }
     }
 
+    //region Mouse Events
     drawer.canvas.addEventListener('mousedown', function (mouseEvent) {
         let pos = {x: mouseEvent.offsetX, y: mouseEvent.offsetY};
         switch (drawer.selectedShape) {
@@ -88,23 +87,35 @@
             drawer.undoneShapes.splice(0, drawer.undoneShapes.length);
         }
     });
+    //endregion
 
+    //region UNDO REDO
+    function redo() {
+        if (drawer.undoneShapes.length > 0) {
+            drawer.shapes.push(drawer.undoneShapes.pop());
+            redraw();
+        }
+    }
+    function undo() {
+        if (drawer.shapes.length > 0) {
+            drawer.undoneShapes.push(drawer.shapes.pop());
+            redraw();
+        }
+    }
     document.addEventListener('keypress', function (evt) {
         if (evt.key.toUpperCase() === 'Z' && evt.ctrlKey) {
             if (evt.shiftKey) {
-                if (drawer.undoneShapes.length > 0) {
-                    drawer.shapes.push(drawer.undoneShapes.pop());
-                    redraw();
-                }
+                redo();
             } else {
-                if (drawer.shapes.length > 0) {
-                    drawer.undoneShapes.push(drawer.shapes.pop());
-                    redraw();
-                }
+                undo();
             }
         }
     });
+    document.getElementById('btn-undo').addEventListener('click', undo);
+    document.getElementById('btn-redo').addEventListener('click', redo);
+    //endregion
 
+    //region Shape-selecting
     document.querySelectorAll('#shape-list li').forEach(function (elem) {
         elem.addEventListener('click', function (evt) {
             let clickedShape = elem.dataset.shape;
@@ -117,13 +128,32 @@
             }
         });
     });
+    //endregion
 
+    //region Set-filled
+    let filled = document.getElementById('fill-toggle');
+    filled.addEventListener('click', function (evt) {
+        filled.firstChild.classList.toggle('far');
+        filled.firstChild.classList.toggle('fas');
+        if (filled.dataset['filled'] === 'no') {
+            filled.dataset['filled'] = 'yes';
+            drawer.settings.filled = true;
+        } else {
+            filled.dataset['filled'] = 'no';
+            drawer.settings.filled = false;
+        }
+    });
+    //endregion
+
+    //region Color-picking
     let colorPicker = document.getElementById('color-selector');
     colorPicker.value = '#000000';
     colorPicker.addEventListener('change', function (evt) {
         drawer.settings.color = colorPicker.value;
     });
+    //endregion
 
+    //region FILE-IO
     document.getElementById('img-save').addEventListener('click', function (evt) {
         let lst = [];
         for (let i = 0; i < drawer.shapes.length; i++) {
@@ -140,7 +170,6 @@
         document.body.removeChild(tmp);
 
     });
-
 
     function constructShapesFromFile(e) {
         let contents = e.target.result;
@@ -217,5 +246,6 @@
         drawer.undoneShapes.splice(0, drawer.undoneShapes.length);
         redraw();
     });
+    //endregion
 
 })();
