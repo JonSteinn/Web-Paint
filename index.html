@@ -5,19 +5,21 @@
     <title>Web-Paint</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="assets/css/paint_styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://rawgit.com/goldfire/CanvasInput/master/CanvasInput.min.js"></script>
 </head>
 <body>
-    <nav id="main-nav" class="navbar navbar-default">
+    <nav id="main-nav" class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <ul id="shape-list" class="nav navbar-nav">
-                <li class="active" data-shape="rectangle"><a>RECTANGLE</a></li>
+                <li data-shape="rectangle"><a><i class="far fa-square"></i></a></li>
                 <li data-shape="oval"><a>OVAL</a></li>
-                <li data-shape="circle"><a>CIRCLE</a></li>
-                <li data-shape="line"><a>LINE</a></li>
-                <li data-shape="lineList"><a>LINE_LIST</a></li>
+                <li data-shape="circle"><a><i class="far fa-circle"></i></a></li>
+                <li data-shape="line"><a><span class="glyphicon glyphicon-minus"></span></a></li>
+                <li class="active" data-shape="lineList"><a><span class="glyphicon glyphicon-pencil"></span></a></li>
+                <li data-shape="text"><a><span class="glyphicon glyphicon-text-width"></span></a></li>
             </ul>
         </div>
     </nav>
@@ -29,3 +31,4 @@
     <script src="assets/js/shapes.js"></script>
     <script src="assets/js/draw.js"></script>
 </body>
+
