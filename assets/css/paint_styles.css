@@ -1,7 +1,9 @@
+/* Make background slightly darker so canvas is visible as white */
 body {
     background-color: darkgray;
 }
 
+/* Center the canvas */
 #canvas {
     background-color: white;
     padding: 0;
@@ -14,6 +16,7 @@ body {
     right: 0;
 }
 
+/* Center the navigation bar */
 #main-nav {
     position: absolute;
     left: 0;

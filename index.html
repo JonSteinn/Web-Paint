@@ -3,46 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <title>Web-Paint</title>
+    <!--
+    Included style sheets
+        1) Bootstrap
+        2) Awesome font
+        3) Custom
+    -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link  rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+           integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+           crossorigin="anonymous">
     <link href="assets/css/paint_styles.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <!--
+    Included Scripts
+        1) JQuery
+        2) Bootstrap
+    -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://rawgit.com/goldfire/CanvasInput/master/CanvasInput.min.js"></script>
 </head>
 <body>
+
+    <!-- Navigation bar -->
     <nav id="main-nav" class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
+            <!-- Shapes -->
             <ul id="shape-list" class="nav navbar-nav">
-                <li data-shape="rectangle"><a><i class="far fa-square"></i></a></li>
-                <li data-shape="oval"><a><i class="far fa-compass"></i></a></li>
-                <li data-shape="circle"><a><i class="far fa-circle"></i></a></li>
-                <li data-shape="line"><a><span class="glyphicon glyphicon-minus"></span></a></li>
-                <li class="active" data-shape="lineList"><a><span class="glyphicon glyphicon-pencil"></span></a></li>
-                <li data-shape="text"><a><span class="glyphicon glyphicon-text-width"></span></a></li>
-                <li data-shape="move"><a><span class="glyphicon glyphicon-move"></span></a></li>
+                <li data-shape="rectangle">
+                    <a>
+                        <i class="far fa-square"></i>
+                    </a>
+                </li>
+                <li data-shape="oval">
+                    <a>
+                        <i class="far fa-compass"></i>
+                    </a>
+                </li>
+                <li data-shape="circle">
+                    <a>
+                        <i class="far fa-circle"></i>
+                    </a>
+                </li>
+                <li data-shape="line">
+                    <a>
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </a>
+                </li>
+                <li class="active" data-shape="lineList">
+                    <a>
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </a>
+                </li>
+                <li data-shape="text">
+                    <a>
+                        <span class="glyphicon glyphicon-text-width"></span>
+                    </a>
+                </li>
+                <li data-shape="move">
+                    <a>
+                        <span class="glyphicon glyphicon-move"></span>
+                    </a>
+                </li>
             </ul>
+            <!-- Settings -->
             <ul id="settings-list" class="nav navbar-nav">
-                <li><a><input id="color-selector" type="color"></a></li>
-                <li><a data-toggle="modal" data-target="#size-modal"><i class="fas fa-ruler-combined"></i></a></li>
-                <li><a id="fill-toggle" data-filled="no"><i class="far fa-star"></i></a></li>
+                <li>
+                    <a>
+                        <input id="color-selector" type="color">
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="modal" data-target="#size-modal">
+                        <i class="fas fa-ruler-combined"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="fill-toggle" data-filled="no">
+                        <i class="far fa-star"></i>
+                    </a>
+                </li>
             </ul>
+            <!-- IO -->
             <ul id="io-list" class="nav navbar-nav">
-                <li><a id="img-save"><span class="glyphicon glyphicon-download"></span></a></li>
-                <li><a id="img-load"><span class="glyphicon glyphicon-upload"></span></a></li>
-                <li><a id="img-clear"><i class="fas fa-file"></i></a></li>
+                <li>
+                    <a id="img-save">
+                        <span class="glyphicon glyphicon-download"></span>
+                    </a>
+                </li>
+                <li>
+                    <a id="img-load">
+                        <span class="glyphicon glyphicon-upload"></span>
+                    </a>
+                </li>
+                <li>
+                    <a id="img-clear">
+                        <i class="fas fa-file"></i>
+                    </a>
+                </li>
             </ul>
+            <!-- Undo + Redo -->
             <ul id="time-travel" class="nav navbar-nav">
-                <li><a id="btn-undo"><i class="fas fa-undo"></i></a></li>
-                <li><a id="btn-redo"><i class="fas fa-redo"></i></a></li>
+                <li>
+                    <a id="btn-undo">
+                        <i class="fas fa-undo"></i>
+                    </a>
+                </li>
+                <li>
+                    <a id="btn-redo">
+                        <i class="fas fa-redo"></i>
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
+
+
+    <!-- Canvas -->
     <div class="container-fluid">
         <canvas id="canvas" width="1000" height="600">
             Your browser does not support canvas :(
         </canvas>
     </div>
+
+
+    <!-- Hidden modal for size adjustments -->
     <div id="size-modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -55,15 +139,31 @@
                         <tbody>
                             <tr id="font-row" data-value="12pt">
                                 <td>Font size</td>
-                                <td><a class="decrease"><i class="fas fa-minus"></i></a></td>
+                                <td>
+                                    <a class="decrease">
+                                        <i class="fas fa-minus"></i>
+                                    </a>
+                                </td>
                                 <td class="value-data">12pt</td>
-                                <td><a class="increase"><i class="fas fa-plus"></i></a></td>
+                                <td>
+                                    <a class="increase">
+                                        <i class="fas fa-plus"></i>
+                                    </a>
+                                </td>
                             </tr>
                             <tr id="width-row" data-value="1">
                                 <td>Line width</td>
-                                <td><a class="decrease"><i class="fas fa-minus"></i></a></td>
+                                <td>
+                                    <a class="decrease">
+                                        <i class="fas fa-minus"></i>
+                                    </a>
+                                </td>
                                 <td class="value-data">1</td>
-                                <td><a class="increase"><i class="fas fa-plus"></i></a></td>
+                                <td>
+                                    <a class="increase">
+                                        <i class="fas fa-plus"></i>
+                                    </a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -75,9 +175,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Scripts for canvas -->
     <script src="assets/js/shapes.js"></script>
     <script src="assets/js/draw.js"></script>
 </body>
-
-
-
