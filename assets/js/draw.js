@@ -265,6 +265,7 @@
     // region Filled setting
     // On click event for the star (which is either filled or not)
     let filled = document.getElementById('fill-toggle');
+    console.log(filled.firstChild);
     filled.addEventListener('click',
         /**
          * A boolean value for filled is toggled by clicking
@@ -274,8 +275,8 @@
          * @param evt The event that triggered this callback.
          */
         function (evt) {
-            filled.firstChild.classList.toggle('far');
-            filled.firstChild.classList.toggle('fas');
+            filled.firstElementChild.classList.toggle('far');
+            filled.firstElementChild.classList.toggle('fas');
             if (filled.dataset['filled'] === 'no') {
                 filled.dataset['filled'] = 'yes';
                 drawer.settings.filled = true;
